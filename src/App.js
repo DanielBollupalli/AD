@@ -5,15 +5,15 @@ import Signup from "./Signup";
 import Profile from "./Profile";
 import Navbar from "./Navbar";
 import logo from "./logo.png";
+import Cards from "./Cards";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
-  const [showContact, setShowContact] = useState(false);
+  const [activeTab, setActiveTab] = useState("home");
 
   const handleLogin = (identifier, password) => {
     const existingUser = users.find(
@@ -23,6 +23,7 @@ function App() {
       setIsLoggedIn(true);
       setUser(existingUser);
       setShowLogin(false);
+      setActiveTab("home");
       return true;
     } else {
       alert("Incorrect email/username or password.");
@@ -40,20 +41,14 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
-    setShowProfile(false);
-    setShowContact(false);
+    setActiveTab("home");
   };
 
   return (
     <div className="App">
       <header className="header">
-        <img 
-          src={logo} 
-          alt="CareNest Logo" 
-          className="logo" 
-          onClick={() => setShowContact(false)} 
-        />
-        <h1 onClick={() => setShowContact(false)}>CareNest</h1>
+        <img src={logo} alt="CareNest Logo" className="logo" onClick={() => setActiveTab("home")} />
+        <h1 onClick={() => setActiveTab("home")}>CareNest</h1>
         <nav>
           {isLoggedIn ? (
             <>
@@ -70,56 +65,65 @@ function App() {
 
       {isLoggedIn && (
         <Navbar 
-          onProfileClick={() => setShowProfile(true)} 
-          onContactClick={() => setShowContact(true)} 
-          onHomeClick={() => setShowContact(false)} 
+          onProfileClick={() => setActiveTab("profile")} 
+          onContactClick={() => setActiveTab("contact")} 
+          onHomeClick={() => setActiveTab("home")} 
         />
       )}
 
-      <main className="landing">
-        {!showContact ? (
-          <>
-            <h2>Welcome to CareNest</h2>
-            <p>Your trusted platform for care and wellness.</p>
+      <div className="content-wrapper">
+        <main className="landing">
+          {activeTab === "home" && (
+            <>
+              <h2>Welcome to CareNest</h2>
+              <p>Your trusted platform for care and wellness.</p>
+              {!isLoggedIn && (
+                <section className="services">
+                  <h3>Our Services</h3>
+                  <ul>
+                    <li>24/7 Online Consultation</li>
+                    <li>Home Healthcare Assistance</li>
+                    <li>Medical Appointment Scheduling</li>
+                    <li>Wellness and Fitness Guidance</li>
+                  </ul>
+                </section>
+              )}
+              {isLoggedIn && <Cards />}
+            </>
+          )}
 
-            {!isLoggedIn && (
-              <section className="services">
-                <h3>Our Services</h3>
-                <ul>
-                  <li>24/7 Online Consultation</li>
-                  <li>Home Healthcare Assistance</li>
-                  <li>Medical Appointment Scheduling</li>
-                  <li>Wellness and Fitness Guidance</li>
-                </ul>
-              </section>
-            )}
-          </>
-        ) : (
-          <section className="services">
-            <h3>Our Services</h3>
-            <ul>
-              <li>24/7 Online Consultation</li>
-              <li>Home Healthcare Assistance</li>
-              <li>Medical Appointment Scheduling</li>
-              <li>Wellness and Fitness Guidance</li>
-            </ul>
-          </section>
-        )}
-      </main>
-      
+          {activeTab === "contact" && (
+            <section className="services">
+              <h3>Our Services</h3>
+              <ul>
+                <li>24/7 Online Consultation</li>
+                <li>Home Healthcare Assistance</li>
+                <li>Medical Appointment Scheduling</li>
+                <li>Wellness and Fitness Guidance</li>
+              </ul>
+            </section>
+          )}
+
+          {activeTab === "profile" && isLoggedIn && (
+            <Profile user={user} close={() => setActiveTab("home")} />
+          )}
+        </main>
+      </div>
+
       {!isLoggedIn && (
         <section className="cta">
           <button className="cta-button" onClick={() => setShowSignup(true)}>Join Now</button>
         </section>
       )}
 
+      {/* ✅ Footer always stays at the bottom */}
       <footer className="footer">
         <p>© 2025 CareNest. All Rights Reserved.</p>
       </footer>
 
+      {/* ✅ Popups should appear over the footer */}
       {showLogin && <Login close={() => setShowLogin(false)} onLogin={handleLogin} setShowSignup={setShowSignup} />}
       {showSignup && <Signup close={() => setShowSignup(false)} onSignup={handleSignup} setShowLogin={setShowLogin} />}
-      {showProfile && isLoggedIn && <Profile user={user} close={() => setShowProfile(false)} />}
     </div>
   );
 }

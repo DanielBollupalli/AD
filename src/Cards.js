@@ -1,5 +1,5 @@
 import React from "react";
-import "./Cards.css"; // Import the CSS file
+import "./Cards.css";
 
 const retirementHomes = [
   { name: "Sunnyvale Retreat", location: "California, USA", image: "sunnyvale.jpg" },
@@ -8,7 +8,7 @@ const retirementHomes = [
   { name: "Elderly Bliss", location: "Texas, USA", image: "elderlybliss.jpg" }
 ];
 
-const RetirementHomeCards = () => {
+const Cards = () => {  
   return (
     <div className="cards-container">
       {retirementHomes.map((home, index) => (

@@ -4,14 +4,19 @@ body {
   padding: 0;
   background-color: #f5f5f5;
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Main App Container */
 .App {
   text-align: center;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  padding-top: 80px; /* Adjust for fixed header */
+  padding-bottom: 50px; /* Adjust for fixed footer */
 }
 
 /* Header Styling */
@@ -22,6 +27,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
 }
 
 /* Logo Styling */
@@ -148,8 +157,10 @@ h2 {
   color: white;
   padding: 10px;
   text-align: center;
-  position: relative;
+  position: fixed;
+  bottom: 0;
   width: 100%;
+  z-index: 999;
 }
 
 /* Modal Overlay */
@@ -163,6 +174,7 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Ensures modals are above everything */
 }
 
 /* Modal */
@@ -234,6 +246,7 @@ h2 {
 /* Profile Styling */
 .profile {
   padding: 20px;
+  z-index: 1000;
 }
 
 .profile-info {
@@ -310,12 +323,8 @@ h2 {
       text-align: center;
   }
 
-  nav button {
-      margin: 5px;
-  }
-
-  .services,
-  .about {
-      max-width: 90%;
+  .App {
+      padding-top: 100px; /* Adjust for smaller header */
+      padding-bottom: 60px; /* Adjust for smaller footer */
   }
 }
