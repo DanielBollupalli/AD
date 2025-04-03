@@ -3,7 +3,8 @@ import "./App.css";
 import Login from "./Login";
 import Signup from "./Signup";
 import Profile from "./Profile";
-import logo from "./logo.png"; // Ensure logo.png is inside the src folder
+import Navbar from "./Navbar";
+import logo from "./logo.png";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -12,6 +13,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
+  const [showContact, setShowContact] = useState(false);
 
   const handleLogin = (identifier, password) => {
     const existingUser = users.find(
@@ -39,22 +41,23 @@ function App() {
     setIsLoggedIn(false);
     setUser(null);
     setShowProfile(false);
+    setShowContact(false);
   };
 
   return (
     <div className="App">
-      {/* Header Section */}
       <header className="header">
-        <img src={logo} alt="CareNest Logo" className="logo" />
-        <h1>CareNest</h1>
+        <img 
+          src={logo} 
+          alt="CareNest Logo" 
+          className="logo" 
+          onClick={() => setShowContact(false)} 
+        />
+        <h1 onClick={() => setShowContact(false)}>CareNest</h1>
         <nav>
-          <button onClick={() => { setShowLogin(false); setShowSignup(false); setShowProfile(false); }}>Home</button>
           {isLoggedIn ? (
             <>
               <button onClick={handleLogout}>Logout</button>
-              <button className="profile-button" onClick={() => { setShowProfile(true); }}>
-                {user.name.charAt(0).toUpperCase()}
-              </button>
             </>
           ) : (
             <>
@@ -65,36 +68,55 @@ function App() {
         </nav>
       </header>
 
-      {/* Landing Page Section */}
+      {isLoggedIn && (
+        <Navbar 
+          onProfileClick={() => setShowProfile(true)} 
+          onContactClick={() => setShowContact(true)} 
+          onHomeClick={() => setShowContact(false)} 
+        />
+      )}
+
       <main className="landing">
-        <h2>Welcome to CareNest</h2>
-        <p>Your trusted platform for care and wellness.</p>
+        {!showContact ? (
+          <>
+            <h2>Welcome to CareNest</h2>
+            <p>Your trusted platform for care and wellness.</p>
 
-        {/* Services Section */}
-        <section className="services">
-          <h3>Our Services</h3>
-          <ul>
-            <li>24/7 Online Consultation</li>
-            <li>Home Healthcare Assistance</li>
-            <li>Medical Appointment Scheduling</li>
-            <li>Wellness and Fitness Guidance</li>
-          </ul>
-        </section>
-
-        {/* Call-to-Action Section */}
-        {!isLoggedIn && (
-          <section className="cta">
-            <button className="cta-button" onClick={() => setShowSignup(true)}>Join Now</button>
+            {!isLoggedIn && (
+              <section className="services">
+                <h3>Our Services</h3>
+                <ul>
+                  <li>24/7 Online Consultation</li>
+                  <li>Home Healthcare Assistance</li>
+                  <li>Medical Appointment Scheduling</li>
+                  <li>Wellness and Fitness Guidance</li>
+                </ul>
+              </section>
+            )}
+          </>
+        ) : (
+          <section className="services">
+            <h3>Our Services</h3>
+            <ul>
+              <li>24/7 Online Consultation</li>
+              <li>Home Healthcare Assistance</li>
+              <li>Medical Appointment Scheduling</li>
+              <li>Wellness and Fitness Guidance</li>
+            </ul>
           </section>
         )}
       </main>
+      
+      {!isLoggedIn && (
+        <section className="cta">
+          <button className="cta-button" onClick={() => setShowSignup(true)}>Join Now</button>
+        </section>
+      )}
 
-      {/* Footer Section */}
       <footer className="footer">
         <p>© 2025 CareNest. All Rights Reserved.</p>
       </footer>
 
-      {/* Modals */}
       {showLogin && <Login close={() => setShowLogin(false)} onLogin={handleLogin} setShowSignup={setShowSignup} />}
       {showSignup && <Signup close={() => setShowSignup(false)} onSignup={handleSignup} setShowLogin={setShowLogin} />}
       {showProfile && isLoggedIn && <Profile user={user} close={() => setShowProfile(false)} />}
