@@ -38,6 +38,13 @@ function App() {
     setShowLogin(true);
   };
 
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    setUsers((prevUsers) =>
+      prevUsers.map((u) => (u.email === updatedUser.email ? updatedUser : u))
+    );
+  };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
@@ -105,7 +112,7 @@ function App() {
           )}
 
           {activeTab === "profile" && isLoggedIn && (
-            <Profile user={user} close={() => setActiveTab("home")} />
+            <Profile user={user} updateUser={updateUser} close={() => setActiveTab("home")} />
           )}
         </main>
       </div>
@@ -116,12 +123,10 @@ function App() {
         </section>
       )}
 
-      {/* ✅ Footer always stays at the bottom */}
       <footer className="footer">
         <p>© 2025 CareNest. All Rights Reserved.</p>
       </footer>
 
-      {/* ✅ Popups should appear over the footer */}
       {showLogin && <Login close={() => setShowLogin(false)} onLogin={handleLogin} setShowSignup={setShowSignup} />}
       {showSignup && <Signup close={() => setShowSignup(false)} onSignup={handleSignup} setShowLogin={setShowLogin} />}
     </div>

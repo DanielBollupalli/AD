@@ -12,8 +12,12 @@ function Profile({ user, close, updateUser, deleteUser }) {
   };
 
   const handleSave = () => {
-    updateUser({ ...tempUser, profilePicture });
-    setEditingField(null);
+    if (typeof updateUser === "function") {
+      updateUser({ ...tempUser, profilePicture });
+      setEditingField(null);
+    } else {
+      console.error("updateUser is not a function");
+    }
   };
 
   const handleProfilePictureUpload = (e) => {
@@ -51,7 +55,7 @@ function Profile({ user, close, updateUser, deleteUser }) {
             <label>{label}:</label>
             {editingField === key ? (
               <>
-                <input type={type} name={key} value={tempUser[key]} onChange={handleFieldChange} />
+                <input type={type} name={key} value={tempUser[key] || ""} onChange={handleFieldChange} />
                 <button className="save-button" onClick={handleSave}>Save</button>
               </>
             ) : (
