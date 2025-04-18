@@ -3,6 +3,9 @@ body {
     padding: 0;
     background-color: #e0e0e0;
     font-family: Arial, sans-serif;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("images/oh.jpg");
   }
   
   #root {
